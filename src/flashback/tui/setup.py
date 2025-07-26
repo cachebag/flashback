@@ -161,7 +161,10 @@ class SetupModal(ModalScreen):
             status_label.update("✅ API key saved successfully!")
             self.api_key = api_key
             
-            self.set_timer(1.0, lambda: self.dismiss(self.api_key))
+            self.set_timer(1.0, self.dismiss_with_result)
             
         except ValueError as e:
-            status_label.update(f"❌ Error saving API key: {e}") 
+            status_label.update(f"❌ Error saving API key: {e}")
+    
+    def dismiss_with_result(self) -> None:
+        self.dismiss(self.api_key) 
