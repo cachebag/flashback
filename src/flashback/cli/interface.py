@@ -19,7 +19,6 @@ class YouTubeSearchCLI:
         if not config.get('has_api_key'):
             click.echo(f"{Fore.YELLOW}No YouTube API key found.{Style.RESET_ALL}")
             try:
-                api_key = setup_api_key_interactive()
                 config = load_config()
             except (KeyboardInterrupt, click.Abort):
                 click.echo(f"\n{Fore.RED}Setup cancelled. Cannot proceed without API key.{Style.RESET_ALL}")
@@ -92,7 +91,6 @@ class YouTubeSearchCLI:
                     break
     
     def update_api_key_interactive(self):
-        """Interactive API key update process."""
         try:
             click.echo(f"\n{Fore.CYAN}🔑 Update YouTube API Key{Style.RESET_ALL}")
             click.echo(f"{Fore.YELLOW}Current API key will be replaced with the new one.{Style.RESET_ALL}")
@@ -103,7 +101,6 @@ class YouTubeSearchCLI:
             
             api_key = setup_api_key_interactive()
             
-            # Reinitialize the YouTube client with the new API key
             try:
                 self.youtube_client = YouTubeClient(api_key)
                 click.echo(f"\n{Fore.GREEN}✅ API key updated and client reinitialized successfully!{Style.RESET_ALL}")
@@ -217,12 +214,10 @@ class YouTubeSearchCLI:
     default=False,
     help='Update your YouTube API key and exit'
 )
-def search(query: str, year: int, max_results: int, interactive: bool, update_api_key: bool):
+def search(query: str, year: int, max_results: int, update_api_key: bool):
     try:
-        # Handle API key update flag
         if update_api_key:
             try:
-                api_key = setup_api_key_interactive()
                 click.echo(f"\n{Fore.GREEN}✅ API key updated successfully!{Style.RESET_ALL}")
                 click.echo(f"{Fore.BLUE}You can now use ytflashback-cli normally.{Style.RESET_ALL}")
             except (KeyboardInterrupt, click.Abort):
