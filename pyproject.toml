@@ -45,7 +45,7 @@ Repository = "https://github.com/cachebga/flashback.git"
 Issues = "https://github.com/cachebag/flashback/issues"
 
 [project.scripts]
-ytflashback = "flashback.main:main_tui"
+ytflashback = "flashback.main:main"
 ytflashback-cli = "flashback.main:main_cli"
 
 [project.optional-dependencies]
