@@ -1,0 +1,147 @@
+Screen {
+    background: $background;
+}
+
+Vertical#search_form {
+    width: 60;
+    height: auto;
+    margin: 2;
+}
+
+Input {
+    margin: 1 0;
+}
+
+Select {
+    margin: 1 0;
+}
+
+Button {
+    margin: 1 0;
+    width: 100%;
+}
+
+Label {
+    text-align: center;
+    margin: 1 0;
+}
+
+Vertical#results_container {
+    width: 150;
+    height: auto;
+    margin: 2;
+}
+
+#results_scroll {
+    height: 20;
+    margin: 1 0;
+}
+
+#search_button {
+    width: 100%;
+    margin: 0;
+    dock: bottom;
+    background: transparent;
+    border: solid transparent;
+    color: $primary;
+    text-style: bold;
+    border: heavy $accent;
+}
+
+#search_button:hover {
+    color: $accent;
+}
+
+#search_button:focus {
+    color: $accent;
+}
+
+#back_button {
+    width: 12;
+    margin: 0 0 1 0;
+    background: transparent;
+    border: none;
+    color: $text-muted;
+    text-align: left;
+}
+
+#back_button:hover {
+    color: $text;
+    background: transparent;
+}
+
+#back_button:focus {
+    color: $accent;
+    background: transparent;
+}
+
+VideoItem {
+    margin: 1;
+    padding: 1;
+    border: solid $primary;
+    background: $surface;
+}
+
+VideoItem:hover {
+    border: solid $accent;
+    background: $panel;
+}
+
+VideoItem:focus {
+    border: solid $accent;
+    background: $panel;
+}
+
+/* Setup Screen Styles */
+#setup_form, #modal_setup_form {
+    width: 80;
+    height: auto;
+    margin: 2;
+}
+
+#title {
+    text-align: center;
+    text-style: bold;
+    color: $accent;
+    margin: 0 0 2 0;
+    width: 100%;
+    dock: top;
+}
+
+#modal_title {
+    text-align: center;
+    text-style: bold;
+    color: $accent;
+    margin: 1 0;
+}
+
+#description, #instructions_title {
+    text-align: center;
+    margin: 1 0;
+}
+
+#step1, #step2, #step3, #step4, #step5 {
+    text-align: left;
+    margin: 0 2;
+    color: $text-muted;
+}
+
+#api_key_input, #modal_api_key_input {
+    margin: 1 0;
+    width: 100%;
+}
+
+#save_button, #modal_save_button {
+    margin: 1 0;
+    width: 100%;
+}
+
+#quit_button, #modal_cancel_button {
+    margin: 1 0;
+    width: 100%;
+}
+
+#spacer1, #spacer2, #spacer3, #spacer4,
+#modal_spacer1, #modal_spacer2 {
+    height: 1;
+} 

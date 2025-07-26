@@ -12,6 +12,14 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from flashback.cli import search
+from flashback.tui.interface import run_tui
 
 if __name__ == '__main__':
-    search() 
+    # Check if --cli flag is provided
+    if '--cli' in sys.argv:
+        # Remove --cli from argv so click doesn't see it
+        sys.argv.remove('--cli')
+        search()
+    else:
+        # Default to TUI interface
+        run_tui() 
