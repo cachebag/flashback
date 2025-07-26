@@ -1,6 +1,6 @@
 # 📹 flashback
 
-A modern YouTube search tool that helps you find older content by searching videos from specific years. Available as both a Terminal User Interface (TUI - Thanks to Textual) and Command Line Interface (CLI).
+A modern YouTube search tool that helps you find older content by searching videos from specific years. Available as both a Terminal User Interface (TUI - Thanks to [Textual](https://github.com/Textualize/textual)) and Command Line Interface (CLI).
 
 ## Why?
 
@@ -18,7 +18,7 @@ YouTube's search filters are notoriously poor, especially when trying to find ol
 
 ## Installation
 
-### From PyPI (Recommended)
+### pip, uv and poetry
 ```bash
 # -- pip -- 
 pip install ytflashback
