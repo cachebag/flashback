@@ -2,3 +2,5 @@ venv
 .env
 /venv
 __pycache__
+dist
+/dist
