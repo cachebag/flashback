@@ -1,6 +1,22 @@
 # 📹 flashback
 
-A modern YouTube search tool that helps you find older content by searching videos from specific years. Available as both a Terminal User Interface (TUI - Thanks to [Textual](https://github.com/Textualize/textual)) and Command Line Interface (CLI).
+A YouTube search tool that helps you find older content by searching videos from specific years. Available as both a Terminal User Interface (TUI - Thanks to [Textual](https://github.com/Textualize/textual)) and Command Line Interface (CLI).
+
+# Demo
+
+## TUI 
+
+
+https://github.com/user-attachments/assets/220a5961-426e-47b1-b3c2-056bf7ba2453
+
+## CLI
+
+
+
+https://github.com/user-attachments/assets/128a234b-18fa-401b-85ca-c699eae43094
+
+
+
 
 ## Why?
 
@@ -10,9 +26,8 @@ YouTube's search filters are notoriously poor, especially when trying to find ol
 
 -  **Search by specific year** - Find videos from any year (2005-2025)
 -  **TUI interface** - Modern terminal interface with themes
--  **CLI mode** - Perfect for scripts and power users
+-  **CLI mode** - Flags for power users and scripts
 -  **Easy API key management** - Multiple ways to configure your YouTube API key
--  **Rich video details** - Title, channel, duration, views, publish date
 -  **Multiple themes** - Dark, light, gruvbox, dracula, nord, and more
 -  **Direct video URLs** - Quick access to watch videos
 
@@ -110,12 +125,11 @@ ytflashback-cli -q "python tutorial" -y 2019 -m 25
 ytflashback-cli --help
 
 Options:
-  -q, --query TEXT             YouTube search query
-  -y, --year INTEGER           Year to search for videos
-  -m, --max-results INTEGER    Maximum number of results (default: 25)
-  -i, --interactive            Start in interactive mode
-  --update-api-key, --api-key  Update your YouTube API key and exit
-  --help                       Show this message and exit
+  -q, --query TEXT             # YouTube search query
+  -y, --year INTEGER           # Year to search for videos
+  -m, --max-results INTEGER    # Maximum number of results (default: 25)
+  --update-api-key, --api-key  # Update your YouTube API key and exit
+  --help                       # Show this message and exit
 ```
 
 ## API Usage
