@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ytflashback"
-version = "1.5.0"
+version = "2.0.0"
 authors = [
     {name = "Akrm Al-Hakimi", email = "alhakimiakrmj@gmail.com"},
 ]
@@ -47,6 +47,7 @@ Issues = "https://github.com/cachebag/flashback/issues"
 [project.scripts]
 ytflashback = "flashback.main:main"
 ytflashback-cli = "flashback.main:main_cli"
+ytflashback-api-key = "flashback.cli:update_api_key"
 
 [project.optional-dependencies]
 dev = [

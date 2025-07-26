@@ -39,20 +39,25 @@ class YouTubeSearchCLI:
         click.echo(f"• YouTube API has a daily quota of 10,000 units")
         click.echo(f"• Each search uses ~100 units (≈100 searches/day)")
         click.echo(f"• The API is free but rate-limited")
-        click.echo(f"• Type 'quit' or 'exit' to end the session\n")
+        click.echo(f"• Type 'quit' or 'exit' to end the session")
+        click.echo(f"• Type 'api' to update your API key\n")
     
     def interactive_mode(self):
         
         while True:
             try:
                 query = click.prompt(
-                    f"{Fore.CYAN}Enter your search query{Style.RESET_ALL}",
+                    f"{Fore.CYAN}Enter your search query (or 'api' to update API key){Style.RESET_ALL}",
                     type=str
                 ).strip()
                 
                 if query.lower() in ['quit', 'exit', 'q']:
                     click.echo(f"\n{Fore.GREEN}Thanks for using YouTube Archive Searcher! 🎬{Style.RESET_ALL}")
                     break
+                
+                if query.lower() in ['api', 'apikey', 'api-key', 'key']:
+                    self.update_api_key_interactive()
+                    continue
                 
                 year = click.prompt(
                     f"{Fore.CYAN}Enter the year to search (2005-2024){Style.RESET_ALL}",
@@ -85,6 +90,31 @@ class YouTubeSearchCLI:
                 click.echo(f"{Fore.RED}Unexpected error: {e}{Style.RESET_ALL}")
                 if not click.confirm(f"{Fore.YELLOW}Continue anyway?{Style.RESET_ALL}", default=True):
                     break
+    
+    def update_api_key_interactive(self):
+        """Interactive API key update process."""
+        try:
+            click.echo(f"\n{Fore.CYAN}🔑 Update YouTube API Key{Style.RESET_ALL}")
+            click.echo(f"{Fore.YELLOW}Current API key will be replaced with the new one.{Style.RESET_ALL}")
+            
+            if not click.confirm(f"{Fore.BLUE}Do you want to continue?{Style.RESET_ALL}", default=True):
+                click.echo(f"{Fore.YELLOW}API key update cancelled.{Style.RESET_ALL}")
+                return
+            
+            api_key = setup_api_key_interactive()
+            
+            # Reinitialize the YouTube client with the new API key
+            try:
+                self.youtube_client = YouTubeClient(api_key)
+                click.echo(f"\n{Fore.GREEN}✅ API key updated and client reinitialized successfully!{Style.RESET_ALL}")
+            except Exception as e:
+                click.echo(f"\n{Fore.RED}❌ Error with new API key: {e}{Style.RESET_ALL}")
+                click.echo(f"{Fore.YELLOW}The API key was saved but there might be an issue with it.{Style.RESET_ALL}")
+                
+        except (KeyboardInterrupt, click.Abort):
+            click.echo(f"\n{Fore.YELLOW}API key update cancelled.{Style.RESET_ALL}")
+        except Exception as e:
+            click.echo(f"\n{Fore.RED}Error updating API key: {e}{Style.RESET_ALL}")
     
     def _validate_inputs(self, year: int, max_results: int) -> bool:
         current_year = datetime.now().year
@@ -181,15 +211,24 @@ class YouTubeSearchCLI:
     default=False,
     help='Start in interactive mode for multiple searches'
 )
-def search(query: str, year: int, max_results: int, interactive: bool):
-    """Search YouTube videos from a specific year.
-    
-    This tool helps you find older YouTube videos that might be buried
-    in search results due to YouTube's algorithm favoring newer content.
-    
-    Run without --query and --year to start interactive mode for multiple searches.
-    """
+@click.option(
+    '--update-api-key', '--api-key',
+    is_flag=True,
+    default=False,
+    help='Update your YouTube API key and exit'
+)
+def search(query: str, year: int, max_results: int, interactive: bool, update_api_key: bool):
     try:
+        # Handle API key update flag
+        if update_api_key:
+            try:
+                api_key = setup_api_key_interactive()
+                click.echo(f"\n{Fore.GREEN}✅ API key updated successfully!{Style.RESET_ALL}")
+                click.echo(f"{Fore.BLUE}You can now use ytflashback-cli normally.{Style.RESET_ALL}")
+            except (KeyboardInterrupt, click.Abort):
+                click.echo(f"\n{Fore.YELLOW}API key update cancelled.{Style.RESET_ALL}")
+            return
+        
         cli = YouTubeSearchCLI()
         
         if query and year:
@@ -204,6 +243,20 @@ def search(query: str, year: int, max_results: int, interactive: bool):
             
     except click.Abort:
         pass
+
+
+@click.command()
+def update_api_key():
+    """Update your YouTube API key configuration."""
+    try:
+        click.echo(f"{Fore.CYAN}🔑 YouTube API Key Update{Style.RESET_ALL}")
+        api_key = setup_api_key_interactive()
+        click.echo(f"\n{Fore.GREEN}✅ API key updated successfully!{Style.RESET_ALL}")
+        click.echo(f"{Fore.BLUE}You can now use ytflashback commands normally.{Style.RESET_ALL}")
+    except (KeyboardInterrupt, click.Abort):
+        click.echo(f"\n{Fore.YELLOW}API key update cancelled.{Style.RESET_ALL}")
+    except Exception as e:
+        click.echo(f"\n{Fore.RED}Error updating API key: {e}{Style.RESET_ALL}")
 
 
 if __name__ == '__main__':
