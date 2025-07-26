@@ -7,13 +7,21 @@ A YouTube search tool that helps you find older content by searching videos from
 ## TUI 
 
 
-https://github.com/user-attachments/assets/220a5961-426e-47b1-b3c2-056bf7ba2453
+
+https://github.com/user-attachments/assets/b87dd093-f1f1-4c66-a75f-876af2fd8d46
+
+
+
 
 ## CLI
 
 
 
-https://github.com/user-attachments/assets/128a234b-18fa-401b-85ca-c699eae43094
+
+
+https://github.com/user-attachments/assets/cc1ff0cf-8b8b-48f7-8fce-ab78510ac59e
+
+
 
 
 
