@@ -1,6 +1,3 @@
-"""
-Configuration utilities for YouTube Searcher.
-"""
 import os
 from dotenv import load_dotenv
 

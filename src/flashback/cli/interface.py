@@ -1,6 +1,3 @@
-"""
-Command-line interface for YouTube Searcher.
-"""
 from datetime import datetime
 import click
 from colorama import init, Fore, Style

@@ -1,6 +1,3 @@
-"""
-Video model for representing YouTube video data.
-"""
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional

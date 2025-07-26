@@ -1,0 +1,84 @@
+Screen {
+    background: $background;
+}
+
+Vertical#search_form {
+    width: 60;
+    height: auto;
+    margin: 2;
+}
+
+Input {
+    margin: 1 0;
+}
+
+Select {
+    margin: 1 0;
+}
+
+Button {
+    margin: 1 0;
+    width: 100%;
+}
+
+Label {
+    text-align: center;
+    margin: 1 0;
+}
+
+Vertical#results_container {
+    width: 100;
+    height: auto;
+    margin: 2;
+}
+
+#results_scroll {
+    height: 20;
+    margin: 1 0;
+}
+
+#search_button {
+    width: 100%;
+    margin: 0;
+    dock: bottom;
+}
+
+#search_button:focus {
+    text-style: none;
+}
+
+#back_button {
+    width: 12;
+    margin: 0 0 1 0;
+    background: transparent;
+    border: none;
+    color: $text-muted;
+    text-align: left;
+}
+
+#back_button:hover {
+    color: $text;
+    background: transparent;
+}
+
+#back_button:focus {
+    color: $accent;
+    background: transparent;
+}
+
+VideoItem {
+    margin: 1;
+    padding: 1;
+    border: solid $primary;
+    background: $surface;
+}
+
+VideoItem:hover {
+    border: solid $accent;
+    background: $panel;
+}
+
+VideoItem:focus {
+    border: solid $accent;
+    background: $panel;
+} 
