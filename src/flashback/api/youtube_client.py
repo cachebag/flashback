@@ -65,12 +65,6 @@ class YouTubeClient:
             raise Exception(f"YouTube API error: {reason}")
     
     def _enrich_video_details(self, videos: List[Video], video_ids: List[str]) -> None:
-        """Enrich video objects with additional details like duration and view count.
-        
-        Args:
-            videos: List of Video objects to enrich
-            video_ids: List of video IDs to get details for
-        """
         try:
             video_response = self.youtube.videos().list(
                 part='statistics,contentDetails',
