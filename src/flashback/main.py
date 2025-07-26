@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-from .cli.interface import search  
+from .cli.interface import run_cli  
 from .tui.interface import run_tui
 
 
@@ -10,7 +10,7 @@ def main_tui():
 
 
 def main_cli():
-    search()
+    run_cli()
 
 
 def main():

@@ -51,7 +51,7 @@ class YouTubeSearchCLI:
                 ).strip()
                 
                 if query.lower() in ['quit', 'exit', 'q']:
-                    click.echo(f"\n{Fore.GREEN}Thanks for using YouTube Archive Searcher! 🎬{Style.RESET_ALL}")
+                    click.echo(f"\n{Fore.GREEN}Thanks for using flashback! 🎬{Style.RESET_ALL}")
                     break
                 
                 if query.lower() in ['api', 'apikey', 'api-key', 'key']:
@@ -77,13 +77,13 @@ class YouTubeSearchCLI:
                 
                 click.echo(f"\n{Fore.YELLOW}{'='*60}{Style.RESET_ALL}")
                 if not click.confirm(f"{Fore.GREEN}Search again?{Style.RESET_ALL}", default=True):
-                    click.echo(f"\n{Fore.GREEN}Thanks for using YouTube Archive Searcher! 🎬{Style.RESET_ALL}")
+                    click.echo(f"\n{Fore.GREEN}Thanks for using flashback! 🎬{Style.RESET_ALL}")
                     break
                     
                 click.echo()
                 
             except (KeyboardInterrupt, click.Abort):
-                click.echo(f"\n\n{Fore.GREEN}Thanks for using YouTube Archive Searcher! 🎬{Style.RESET_ALL}")
+                click.echo(f"\n\n{Fore.GREEN}Thanks for using flashback! 🎬{Style.RESET_ALL}")
                 break
             except Exception as e:
                 click.echo(f"{Fore.RED}Unexpected error: {e}{Style.RESET_ALL}")
@@ -203,12 +203,6 @@ class YouTubeSearchCLI:
     help='Maximum number of results to return (default: 25)'
 )
 @click.option(
-    '--interactive', '-i',
-    is_flag=True,
-    default=False,
-    help='Start in interactive mode for multiple searches'
-)
-@click.option(
     '--update-api-key', '--api-key',
     is_flag=True,
     default=False,
@@ -242,7 +236,6 @@ def search(query: str, year: int, max_results: int, update_api_key: bool):
 
 @click.command()
 def update_api_key():
-    """Update your YouTube API key configuration."""
     try:
         click.echo(f"{Fore.CYAN}🔑 YouTube API Key Update{Style.RESET_ALL}")
         api_key = setup_api_key_interactive()
@@ -252,6 +245,14 @@ def update_api_key():
         click.echo(f"\n{Fore.YELLOW}API key update cancelled.{Style.RESET_ALL}")
     except Exception as e:
         click.echo(f"\n{Fore.RED}Error updating API key: {e}{Style.RESET_ALL}")
+
+
+def run_cli():
+    try:
+        cli = YouTubeSearchCLI()
+        cli.interactive_mode()
+    except click.Abort:
+        pass
 
 
 if __name__ == '__main__':
