@@ -6,7 +6,7 @@ from typing import List
 
 from ..api import YouTubeClient
 from ..models import Video
-from ..utils import load_config
+from ..utils import load_config, setup_api_key_interactive
 
 init()
 
@@ -14,12 +14,22 @@ init()
 class YouTubeSearchCLI:
     
     def __init__(self):
+        config = load_config()
+        
+        if not config.get('has_api_key'):
+            click.echo(f"{Fore.YELLOW}No YouTube API key found.{Style.RESET_ALL}")
+            try:
+                api_key = setup_api_key_interactive()
+                config = load_config()
+            except (KeyboardInterrupt, click.Abort):
+                click.echo(f"\n{Fore.RED}Setup cancelled. Cannot proceed without API key.{Style.RESET_ALL}")
+                raise click.Abort()
+        
         try:
-            config = load_config()
             self.youtube_client = YouTubeClient(config['youtube_api_key'])
             self._show_welcome_message()
-        except ValueError as e:
-            click.echo(f"{Fore.RED}Configuration Error: {e}{Style.RESET_ALL}")
+        except Exception as e:
+            click.echo(f"{Fore.RED}Error initializing YouTube client: {e}{Style.RESET_ALL}")
             raise click.Abort()
     
     def _show_welcome_message(self):

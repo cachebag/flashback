@@ -5,8 +5,9 @@ from textual.containers import Center, Middle, Vertical
 from textual.widgets import Input, Button, Label, Select, Footer
 
 from ..api import YouTubeClient
-from ..utils import load_config
+from ..utils import load_config, save_theme_preference
 from .results import ResultsScreen
+from .setup import SetupScreen, SetupModal
 
 
 class FlashbackTUI(App):
@@ -19,21 +20,33 @@ class FlashbackTUI(App):
         ("ctrl+c", "clear_search", "Clear Search"),
         ("ctrl+p", "command_palette", "Command Palette"),
         ("ctrl+t", "toggle_theme", "Toggle Theme"),
+        ("ctrl+shift+k", "update_api_key", "Update API Key"),
         ("f1", "help", "Help"),
     ]
     
     def __init__(self):
         super().__init__()
         self.enable_command_palette = True
-        try:
-            config = load_config()
-            self.youtube_client = YouTubeClient(config['youtube_api_key'])
-        except ValueError as e:
+        self.config = load_config()
+        
+        self.theme = self.config.get('theme_preference', 'textual-dark')
+        
+        if self.config.get('has_api_key'):
+            try:
+                self.youtube_client = YouTubeClient(self.config['youtube_api_key'])
+                self.error_message = None
+            except Exception as e:
+                self.youtube_client = None
+                self.error_message = f"Error initializing YouTube client: {e}"
+        else:
             self.youtube_client = None
-            self.error_message = str(e)
+            self.error_message = None
     
     def compose(self) -> ComposeResult:
-        if not self.youtube_client:
+        if not self.config.get('has_api_key'):
+            return
+        
+        if not self.youtube_client and self.error_message:
             yield Center(
                 Middle(
                     Label(f"Configuration Error: {self.error_message}")
@@ -60,14 +73,16 @@ class FlashbackTUI(App):
             ("Catppuccin", "catppuccin-mocha"),
         ]
         
+        current_theme = self.config.get('theme_preference', 'textual-dark')
+        
         yield Center(
             Middle(
                 Vertical(
-                    Label("flashback"),
+                    Label("flashback", id="title"),
                     Input(placeholder="Enter your search query...", id="search_input"),
                     Select(year_options, value=current_year, id="year_select"),
                     Select(results_options, value=25, id="results_select"),
-                    Select(theme_options, value="textual-dark", id="theme_select", prompt="Select Theme"),
+                    Select(theme_options, value=current_theme, id="theme_select", prompt="Select Theme"),
                     Button("Search", variant="primary", id="search_button"),
                     Label("", id="status"),
                     id="search_form"
@@ -83,6 +98,7 @@ class FlashbackTUI(App):
     def on_select_changed(self, event: Select.Changed) -> None:
         if event.select.id == "theme_select":
             self.theme = event.value
+            save_theme_preference(event.value)
             status_label = self.query_one("#status", Label)
             status_label.update(f"🎨 Theme changed to {event.value}")
             self.set_timer(1.5, lambda: self.clear_theme_status())
@@ -97,6 +113,17 @@ class FlashbackTUI(App):
     def on_input_submitted(self, event: Input.Submitted) -> None:
         if event.input.id == "search_input":
             self.perform_search()
+    
+    def on_key(self, event) -> None:
+        if event.key in ["ctrl+shift+k", "ctrl+k"]:
+            self.action_update_api_key()
+            event.prevent_default()
+        elif event.key == "ctrl+s":
+            self.action_search()
+            event.prevent_default()
+        elif event.key == "ctrl+c":
+            self.action_clear_search()
+            event.prevent_default()
     
     def on_screen_resume(self) -> None:
         try:
@@ -159,17 +186,35 @@ class FlashbackTUI(App):
             new_theme = "textual-light" if current_theme == "textual-dark" else "textual-dark"
             theme_select.value = new_theme
             self.theme = new_theme
+            # Save theme preference
+            save_theme_preference(new_theme)
             status_label = self.query_one("#status", Label)
             status_label.update(f"🎨 Theme switched to {new_theme}")
             self.set_timer(1.5, lambda: self.clear_status())
         except:
             pass
     
+    def action_update_api_key(self) -> None:
+        def on_api_key_updated(api_key):
+            if api_key:
+                try:
+                    self.youtube_client = YouTubeClient(api_key)
+                    self.config = load_config()
+                    status_label = self.query_one("#status", Label)
+                    status_label.update("✅ API key updated successfully!")
+                    self.set_timer(2.0, lambda: self.clear_status())
+                except Exception as e:
+                    status_label = self.query_one("#status", Label)
+                    status_label.update(f"❌ Error with new API key: {e}")
+                    self.set_timer(3.0, lambda: self.clear_status())
+        
+        self.push_screen(SetupModal(), on_api_key_updated)
+
     def action_help(self) -> None:
         try:
             status_label = self.query_one("#status", Label)
-            status_label.update("💡 Enter search query → Select year → Press Enter or Ctrl+S to search")
-            self.set_timer(3.0, lambda: self.clear_status())
+            status_label.update("💡 Enter search query → Select year → Press Enter or Ctrl+S to search | Ctrl+K or Ctrl+Shift+K to update API key")
+            self.set_timer(4.0, lambda: self.clear_status())
         except:
             pass
     
@@ -183,6 +228,25 @@ class FlashbackTUI(App):
 
 def run_tui():
     app = FlashbackTUI()
+    
+    config = load_config()
+    if not config.get('has_api_key'):
+        def on_setup_complete(api_key):
+            if api_key:
+                app.config = load_config()
+                if app.config.get('has_api_key'):
+                    try:
+                        app.youtube_client = YouTubeClient(app.config['youtube_api_key'])
+                        app.error_message = None
+                    except Exception as e:
+                        app.error_message = f"Error initializing YouTube client: {e}"
+                app.push_screen("main")
+            else:
+                app.exit()
+        
+        setup_screen = SetupScreen()
+        app.push_screen(setup_screen, on_setup_complete)
+    
     app.run()
 
 

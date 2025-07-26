@@ -4,3 +4,4 @@ click
 colorama
 tabulate
 textual
+platformdirs

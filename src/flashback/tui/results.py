@@ -1,6 +1,3 @@
-"""
-Results screen for displaying Flashback search results.
-"""
 import webbrowser
 from textual.app import ComposeResult
 from textual.containers import ScrollableContainer, Vertical, Center, Middle

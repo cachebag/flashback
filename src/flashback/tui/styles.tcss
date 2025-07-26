@@ -27,7 +27,7 @@ Label {
 }
 
 Vertical#results_container {
-    width: 100;
+    width: 150;
     height: auto;
     margin: 2;
 }
@@ -41,10 +41,19 @@ Vertical#results_container {
     width: 100%;
     margin: 0;
     dock: bottom;
+    background: transparent;
+    border: solid transparent;
+    color: $primary;
+    text-style: bold;
+    border: heavy $accent;
+}
+
+#search_button:hover {
+    color: $accent;
 }
 
 #search_button:focus {
-    text-style: none;
+    color: $accent;
 }
 
 #back_button {
@@ -81,4 +90,58 @@ VideoItem:hover {
 VideoItem:focus {
     border: solid $accent;
     background: $panel;
+}
+
+/* Setup Screen Styles */
+#setup_form, #modal_setup_form {
+    width: 80;
+    height: auto;
+    margin: 2;
+}
+
+#title {
+    text-align: center;
+    text-style: bold;
+    color: $accent;
+    margin: 0 0 2 0;
+    width: 100%;
+    dock: top;
+}
+
+#modal_title {
+    text-align: center;
+    text-style: bold;
+    color: $accent;
+    margin: 1 0;
+}
+
+#description, #instructions_title {
+    text-align: center;
+    margin: 1 0;
+}
+
+#step1, #step2, #step3, #step4, #step5 {
+    text-align: left;
+    margin: 0 2;
+    color: $text-muted;
+}
+
+#api_key_input, #modal_api_key_input {
+    margin: 1 0;
+    width: 100%;
+}
+
+#save_button, #modal_save_button {
+    margin: 1 0;
+    width: 100%;
+}
+
+#quit_button, #modal_cancel_button {
+    margin: 1 0;
+    width: 100%;
+}
+
+#spacer1, #spacer2, #spacer3, #spacer4,
+#modal_spacer1, #modal_spacer2 {
+    height: 1;
 } 
