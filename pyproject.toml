@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ytflashback"
-version = "2.25.0"
+version = "2.3.0"
 authors = [
     {name = "Akrm Al-Hakimi", email = "alhakimiakrmj@gmail.com"},
 ]
