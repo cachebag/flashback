@@ -144,4 +144,31 @@ VideoItem:focus {
 #spacer1, #spacer2, #spacer3, #spacer4,
 #modal_spacer1, #modal_spacer2 {
     height: 1;
+}
+
+/* No API Key Screen Styles */
+#no_api_form {
+    width: 80;
+    height: auto;
+    margin: 2;
+}
+
+#no_api_title {
+    text-align: center;
+    text-style: bold;
+    color: $warning;
+    margin: 0 0 2 0;
+}
+
+#instructions {
+    text-align: center;
+    color: $accent;
+    text-style: bold;
+    margin: 1 0;
+}
+
+#help {
+    text-align: center;
+    color: $text-muted;
+    margin: 1 0;
 } 

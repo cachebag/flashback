@@ -18,10 +18,13 @@ class YouTubeSearchCLI:
         
         if not config.get('has_api_key'):
             click.echo(f"{Fore.YELLOW}No YouTube API key found.{Style.RESET_ALL}")
+            click.echo(f"{Fore.CYAN}Let's set up your API key now...{Style.RESET_ALL}")
             try:
+                setup_api_key_interactive()
                 config = load_config()
             except (KeyboardInterrupt, click.Abort):
                 click.echo(f"\n{Fore.RED}Setup cancelled. Cannot proceed without API key.{Style.RESET_ALL}")
+                click.echo(f"{Fore.BLUE}You can run 'ytflashback-api-key' later to set up your API key.{Style.RESET_ALL}")
                 raise click.Abort()
         
         try:
@@ -39,7 +42,8 @@ class YouTubeSearchCLI:
         click.echo(f"• Each search uses ~100 units (≈100 searches/day)")
         click.echo(f"• The API is free but rate-limited")
         click.echo(f"• Type 'quit' or 'exit' to end the session")
-        click.echo(f"• Type 'api' to update your API key\n")
+        click.echo(f"• Type 'api' to update your API key")
+        click.echo(f"• Run 'ytflashback-api-key' from terminal to update API key\n")
     
     def interactive_mode(self):
         

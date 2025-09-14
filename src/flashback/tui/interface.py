@@ -44,6 +44,19 @@ class FlashbackTUI(App):
     
     def compose(self) -> ComposeResult:
         if not self.config.get('has_api_key'):
+            yield Center(
+                Middle(
+                    Vertical(
+                        Label("🔑 No YouTube API Key Found", id="no_api_title"),
+                        Label("", id="spacer1"),
+                        Label("Press Ctrl+Shift+K to set up your API key", id="instructions"),
+                        Label("", id="spacer2"),
+                        Label("Need help? The setup will guide you through getting a free API key from Google.", id="help"),
+                        id="no_api_form"
+                    )
+                )
+            )
+            yield Footer()
             return
         
         if not self.youtube_client and self.error_message:
@@ -186,7 +199,6 @@ class FlashbackTUI(App):
             new_theme = "textual-light" if current_theme == "textual-dark" else "textual-dark"
             theme_select.value = new_theme
             self.theme = new_theme
-            # Save theme preference
             save_theme_preference(new_theme)
             status_label = self.query_one("#status", Label)
             status_label.update(f"🎨 Theme switched to {new_theme}")
@@ -197,16 +209,30 @@ class FlashbackTUI(App):
     def action_update_api_key(self) -> None:
         def on_api_key_updated(api_key):
             if api_key:
-                try:
-                    self.youtube_client = YouTubeClient(api_key)
-                    self.config = load_config()
-                    status_label = self.query_one("#status", Label)
-                    status_label.update("✅ API key updated successfully!")
-                    self.set_timer(2.0, lambda: self.clear_status())
-                except Exception as e:
-                    status_label = self.query_one("#status", Label)
-                    status_label.update(f"❌ Error with new API key: {e}")
-                    self.set_timer(3.0, lambda: self.clear_status())
+                self.youtube_client = YouTubeClient(api_key)
+                self.config = load_config()
+                self.query("*").remove()
+                current_year = datetime.now().year
+                year_options = [(str(year), year) for year in range(current_year, 2004, -1)]
+                results_options = [("10 results", 10), ("25 results", 25), ("50 results", 50)]
+                theme_options = [("Dark", "textual-dark"), ("Light", "textual-light"), ("Gruvbox", "gruvbox"), ("Dracula", "dracula"), ("Nord", "nord"), ("Monokai", "monokai"), ("Tokyo Night", "tokyo-night"), ("Catppuccin", "catppuccin-mocha")]
+                current_theme = self.config.get('theme_preference', 'textual-dark')
+                
+                self.mount(Center(
+                    Middle(
+                        Vertical(
+                            Label("flashback", id="title"),
+                            Input(placeholder="Enter your search query...", id="search_input"),
+                            Select(year_options, value=current_year, id="year_select"),
+                            Select(results_options, value=25, id="results_select"),
+                            Select(theme_options, value=current_theme, id="theme_select", prompt="Select Theme"),
+                            Button("Search", variant="primary", id="search_button"),
+                            Label("", id="status"),
+                            id="search_form"
+                        )
+                    )
+                ))
+                self.mount(Footer())
         
         self.push_screen(SetupModal(), on_api_key_updated)
 
@@ -228,25 +254,6 @@ class FlashbackTUI(App):
 
 def run_tui():
     app = FlashbackTUI()
-    
-    config = load_config()
-    if not config.get('has_api_key'):
-        def on_setup_complete(api_key):
-            if api_key:
-                app.config = load_config()
-                if app.config.get('has_api_key'):
-                    try:
-                        app.youtube_client = YouTubeClient(app.config['youtube_api_key'])
-                        app.error_message = None
-                    except Exception as e:
-                        app.error_message = f"Error initializing YouTube client: {e}"
-                app.push_screen("main")
-            else:
-                app.exit()
-        
-        setup_screen = SetupScreen()
-        app.push_screen(setup_screen, on_setup_complete)
-    
     app.run()
 
 
